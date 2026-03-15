@@ -1,0 +1,58 @@
+{
+    "name": "letmesendemail/letmesendemail-laravel",
+    "keywords": [
+        "LetMeSendEmail",
+        "laravel",
+        "php",
+        "client",
+        "api",
+        "sdk"
+    ],
+    "homepage": "https://letmesend.email/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gurinder Chauhan",
+            "email": "gurinder@apsonex.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "LetMeSendEmail\\Laravel\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LetMeSendEmail\\Tests\\": "tests"
+        }
+    },
+    "require": {
+        "php": "^8.1",
+        "illuminate/http": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+        "letmesendemail/letmesendemail-php": "^1.0",
+        "symfony/mailer": "^6.2|^7.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.5",
+        "orchestra/testbench": "^7.0|^8.0|^10.0|^11.0",
+        "pestphp/pest": "^1.0|^2.0|^3.7|^4.0",
+        "pestphp/pest-plugin-laravel": "^4.1"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LetMeSendEmail\\Laravel\\LetMeSendEmailServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
