@@ -43,3 +43,4 @@ tests/TestSupport/temp
 # Local Files
 run-tests.sh
 docker
+publish.sh
