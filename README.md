@@ -1,6 +1,9 @@
 # LetMeSendEmail Laravel SDK
+[![Tests](https://img.shields.io/github/actions/workflow/status/apsonex/letmesendemail-laravel/test-php.yml?label=tests&style=for-the-badge&labelColor=000000)](https://github.com/apsonex/letmesendemail-laravel/actions/workflows/test-php.yml)
+[![Packagist Downloads](https://img.shields.io/packagist/dt/letmesendemail/letmesendemail-laravel?style=for-the-badge&labelColor=000000)](https://packagist.org/packages/letmesendemail/letmesendemail-laravel)
+[![Packagist Version](https://img.shields.io/packagist/v/letmesendemail/letmesendemail-laravel?style=for-the-badge&labelColor=000000)](https://packagist.org/packages/letmesendemail/letmesendemail-laravel)
+[![License](https://img.shields.io/github/license/apsonex/letmesendemail-laravel?color=9cf&style=for-the-badge&labelColor=000000)](https://github.com/apsonex/letmesendemail-laravel/blob/master/LICENSE)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Official Laravel integration for [LetMeSendEmail](https://letmesend.email), a modern email API service. This package provides:
 
