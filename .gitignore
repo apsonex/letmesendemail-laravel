@@ -35,5 +35,12 @@ testbench.yaml
 !.env.example
 tests/TestSupport/temp
 
+# PHP CS Fixer
+.php-cs-fixer.cache
+
 # Certificates
 *.p12
+
+# Local Files
+run-tests.sh
+docker

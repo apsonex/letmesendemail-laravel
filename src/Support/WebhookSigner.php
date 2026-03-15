@@ -2,7 +2,6 @@
 
 namespace LetMeSendEmail\Laravel\Support;
 
-
 use LetMeSendEmail\Laravel\Exceptions\WebhookSigningException;
 use LetMeSendEmail\Laravel\Exceptions\WebhookVerificationException;
 
@@ -55,7 +54,9 @@ class WebhookSigner
 
         foreach ($passedSignatures as $versionedSignature) {
             $sigParts = explode(',', $versionedSignature, 2);
-            if (count($sigParts) !== 2) continue;
+            if (count($sigParts) !== 2) {
+                continue;
+            }
             $version = $sigParts[0];
             $passedSignature = $sigParts[1];
 

@@ -42,7 +42,7 @@ class LetMeSendEmailTransportFactory extends AbstractTransport
             'content-type',
             'sender',
             'reply-to',
-            'letmesendemail-idempotency-key'
+            'letmesendemail-idempotency-key',
         ];
         foreach ($email->getHeaders()->all() as $name => $header) {
             if ($header instanceof MetadataHeader) {

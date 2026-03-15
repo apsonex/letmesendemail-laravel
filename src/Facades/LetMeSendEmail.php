@@ -4,11 +4,11 @@ namespace LetMeSendEmail\Laravel\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use LetMeSendEmail\Laravel\Support\FakeUtil;
-use \LetMeSendEmail\Resources\Email;
-use \LetMeSendEmail\Resources\Domain;
-use \LetMeSendEmail\Resources\Contact;
-use \LetMeSendEmail\Resources\ContactCategory;
-use \LetMeSendEmail\Client;
+use LetMeSendEmail\Resources\Email;
+use LetMeSendEmail\Resources\Domain;
+use LetMeSendEmail\Resources\Contact;
+use LetMeSendEmail\Resources\ContactCategory;
+use LetMeSendEmail\Client;
 
 /**
  * Provides LetMeSendEmail integration for Laravel and Symfony Mailer.

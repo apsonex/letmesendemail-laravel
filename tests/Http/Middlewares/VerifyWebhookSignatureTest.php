@@ -1,13 +1,14 @@
 <?php
 
-use function Pest\Laravel\postJson;
 use Illuminate\Support\Facades\Route;
 use LetMeSendEmail\Laravel\Support\WebhookSigner;
 use LetMeSendEmail\Laravel\Http\Controllers\WebhookController;
 
+use function Pest\Laravel\postJson;
+
 beforeEach(function () {
     config([
-        'letmesendemail.webhook.secret' => 'whsec_' . base64_encode('webhook-secret')
+        'letmesendemail.webhook.secret' => 'whsec_' . base64_encode('webhook-secret'),
     ]);
 });
 

@@ -53,7 +53,7 @@ class WebhookController extends Controller
         };
 
         if (!$event) {
-            return new Response;
+            return new Response();
         }
 
         $event::dispatch($payload);

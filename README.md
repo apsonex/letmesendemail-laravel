@@ -230,3 +230,19 @@ Contributions are welcome! Please fork the repository, make your changes, and su
 ## License
 
 This package is licensed under the MIT License.
+
+
+composer require --dev friendsofphp/php-cs-fixer orchestra/testbench pestphp/pest pestphp/pest-plugin-laravel phpunit/phpunit
+
+## FOR 8.2
+"friendsofphp/php-cs-fixer": "^3.94",
+"orchestra/testbench": "^10.9",
+"pestphp/pest": "^3.8",
+"pestphp/pest-plugin-laravel": "^3.2",
+"phpunit/phpunit": "^11.5"
+-- 8.3
+"friendsofphp/php-cs-fixer": "^3.94",
+"orchestra/testbench": "^10.9",
+"pestphp/pest": "^3.8",
+"pestphp/pest-plugin-laravel": "^3.2",
+"phpunit/phpunit": "^11.5"
