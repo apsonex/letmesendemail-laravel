@@ -2,13 +2,13 @@
 
 namespace LetMeSendEmail\Laravel;
 
-use LetMeSendEmail\LetMeSendEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use LetMeSendEmail\Contracts\ClientContract;
 use LetMeSendEmail\Laravel\Exceptions\MissingApiKeyException;
 use LetMeSendEmail\Laravel\Transport\LetMeSendEmailTransportFactory;
+use LetMeSendEmail\LetMeSendEmail;
 
 class LetMeSendEmailServiceProvider extends ServiceProvider
 {
@@ -40,10 +40,10 @@ class LetMeSendEmailServiceProvider extends ServiceProvider
     protected function bindLetMeSendEmailClient(): void
     {
         $this->app->singleton(ClientContract::class, static function (): ClientContract {
-            $apiKey = config('letmesendemail.key') ?? config('services.letmesendemail.key');
+            $apiKey        = config('letmesendemail.key') ?? config('services.letmesendemail.key');
             $clientOptions = config('letmesendemail.client.options') ?? config('services.letmesendemail.client.options') ?? [];
 
-            if (!is_string($apiKey)) {
+            if (! is_string($apiKey)) {
                 MissingApiKeyException::throw();
             }
 
@@ -60,10 +60,10 @@ class LetMeSendEmailServiceProvider extends ServiceProvider
     protected function registerRoutes(): void
     {
         Route::group([
-            'domain' => config('letmesendemail.domain', null),
+            'domain'    => config('letmesendemail.domain', null),
             'namespace' => 'LetMeSendEmail\Laravel\Http\Controllers',
-            'prefix' => config('letmesendemail.route.path'),
-            'as' => 'letmesend.',
+            'prefix'    => config('letmesendemail.route.path'),
+            'as'        => 'letmesend.',
         ], function () {
             $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         });

@@ -3,8 +3,10 @@
 namespace LetMeSendEmail\Laravel\Transport;
 
 use Exception;
+use Illuminate\Support\Facades\Log;
 use LetMeSendEmail\Client;
 use LetMeSendEmail\Contracts\ClientContract;
+use LetMeSendEmail\Laravel\Exceptions\MissingApiKeyException;
 use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Header\MetadataHeader;
@@ -30,7 +32,6 @@ class LetMeSendEmailTransportFactory extends AbstractTransport
     {
         $email = MessageConverter::toEmail($message->getOriginalMessage());
         $envelope = $message->getEnvelope();
-
         $headers = [];
         $tags = [];
         $headersToBypass = [
@@ -42,7 +43,7 @@ class LetMeSendEmailTransportFactory extends AbstractTransport
             'content-type',
             'sender',
             'reply-to',
-            'letmesendemail-idempotency-key',
+            'idempotency-key',
         ];
         foreach ($email->getHeaders()->all() as $name => $header) {
             if ($header instanceof MetadataHeader) {
@@ -58,46 +59,56 @@ class LetMeSendEmailTransportFactory extends AbstractTransport
             $headers[$header->getName()] = $header->getBodyAsString();
         }
 
-        $options = [];
-
-        if ($email->getHeaders()->has('LetMeSendEmail-Idempotency-Key')) {
-            $options['idempotency_key'] = $email->getHeaders()->get('LetMeSendEmail-Idempotency-Key')->getBodyAsString();
-        }
+        $idempotencyKey = $email->getHeaders()->has('Idempotency-Key') ? $email->getHeaders()->get('Idempotency-Key')->getBodyAsString() : null;
 
         try {
-            $response = $this->client->emails()->send([
-                'bcc' => $this->stringifyAddresses($email->getBcc()),
-                'cc' => $this->stringifyAddresses($email->getCc()),
-                'from' => $envelope->getSender()->toString(),
-                'headers' => $headers,
-                'html' => $email->getHtmlBody(),
-                'reply_to' => $this->stringifyAddresses($email->getReplyTo()),
-                'subject' => $email->getSubject(),
-                'tags' => $tags,
-                'text' => $email->getTextBody(),
-                'to' => $this->stringifyAddresses($this->getRecipients($email, $envelope)),
+            $payload = [
+                'from'        => $envelope->getSender()->toString(),
+                'to'          => $this->stringifyAddresses($this->getRecipients($email, $envelope)),
+                'cc'          => $this->stringifyAddresses($email->getCc()),
+                'bcc'         => $this->stringifyAddresses($email->getBcc()),
+                'reply_to'    => $this->stringifyAddresses($email->getReplyTo()),
+                'subject'     => $email->getSubject(),
+                'tags'        => $tags,
+                'text'        => $email->getTextBody(),
+                'html'        => $email->getHtmlBody(),
                 'attachments' => $this->getAttachments($email),
-            ], $options);
+                'headers'     => $headers,
+            ];
+
+            $response = $this->client->emails()
+                ->withHeaders(
+                    array_filter(['Idempotency-Key' => $idempotencyKey], fn($value) => !is_null($value))
+                )
+                ->send($payload);
+
+            if ($response->failed()) {
+                if (in_array($response->status(), [401], true)) {
+                    MissingApiKeyException::throw();
+                }
+
+                if ($response->failed()) {
+                    $this->throwTransportException(
+                        code: $response->status(),
+                        message: $response->errorMessage() . ' | ' . $response->errorName()
+                    );
+                }
+            }
+
+            if ($response->id) {
+                $email->getHeaders()->addHeader('X-LetMeSendEmail-ID', $response->id);
+            }
         } catch (Exception $exception) {
-            throw new TransportException(
-                sprintf('Request to the LetMeSendEmail API failed. Reason: %s', $exception->getMessage()),
-                is_int($exception->getCode()) ? $exception->getCode() : 0,
-                $exception
+            $this->throwTransportException(
+                message: sprintf('Request to the LetMeSendEmail API failed. Reason: %s', $exception->getMessage()),
+                code: is_int($exception->getCode()) ? $exception->getCode() : 0,
             );
         }
+    }
 
-
-        $messageId = $response->id ?? null;
-        $statusCode = $response->status() ?? 0;
-
-        if ($statusCode >= 400 || !is_string($messageId) || $messageId === '') {
-            throw new TransportException(
-                sprintf('Request to the LetMeSendEmail API failed. Reason: %s', $response->message ?? 'Unknown error'),
-                $statusCode
-            );
-        }
-
-        $email->getHeaders()->addHeader('X-LetMeSendEmail-ID', $messageId);
+    protected function throwTransportException(int $code, string $message)
+    {
+        throw new TransportException($message, $code);
     }
 
     /**
@@ -122,7 +133,7 @@ class LetMeSendEmailTransportFactory extends AbstractTransport
 
                 $contentType = $attachmentHeaders->get('Content-Type')->getBody();
                 $disposition = $attachmentHeaders->getHeaderBody('Content-Disposition');
-                $filename = $attachmentHeaders->getHeaderParameter('Content-Disposition', 'filename');
+                $filename    = $attachmentHeaders->getHeaderParameter('Content-Disposition', 'filename');
 
                 if ($contentType == 'text/calendar') {
                     $content = $attachment->getBody();
@@ -132,8 +143,8 @@ class LetMeSendEmailTransportFactory extends AbstractTransport
 
                 $item = [
                     'content_type' => $contentType,
-                    'content' => $content,
-                    'name' => $filename,
+                    'content'      => $content,
+                    'name'         => $filename,
                 ];
 
                 if ($disposition === 'inline') {
