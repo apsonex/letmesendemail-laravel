@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Mail\MailManager;
-use Illuminate\Support\Facades\File;
 use LetMeSendEmail\Laravel\Facades\LetMeSendEmail;
 use LetMeSendEmail\Laravel\Support\FakeUtil;
 use Symfony\Component\Mime\Email;
@@ -33,7 +32,7 @@ it('can_send_email', function () {
         ->to(new Address($payload['to']))
         ->cc($payload['cc'][0])
         ->bcc($payload['bcc'][0])
-        ->replyTo($payload['replyTo'])
+        ->replyTo($payload['replyTo'][0])
         ->subject($payload['subject'])
         ->text($payload['text'])
         ->html($payload['html']);
@@ -62,7 +61,7 @@ it('can_send_email_with_attachments', function () {
         ->to(new Address($payload['to']))
         ->cc($payload['cc'][0])
         ->bcc($payload['bcc'][0])
-        ->replyTo($payload['replyTo'])
+        ->replyTo($payload['replyTo'][0])
         ->subject($payload['subject'])
         ->text($payload['text'])
         ->html($payload['html']);
