@@ -4,10 +4,11 @@ namespace LetMeSendEmail\Laravel\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use LetMeSendEmail\Laravel\Support\FakeUtil;
-use LetMeSendEmail\Resources\Email;
-use LetMeSendEmail\Resources\Domain;
-use LetMeSendEmail\Resources\Contact;
-use LetMeSendEmail\Resources\ContactCategory;
+use LetMeSendEmail\Resources\Emails;
+use LetMeSendEmail\Resources\Domains;
+use LetMeSendEmail\Resources\Contacts;
+use LetMeSendEmail\Resources\ContactTags;
+use LetMeSendEmail\Resources\ContactCategories;
 use LetMeSendEmail\Client;
 
 /**
@@ -15,11 +16,11 @@ use LetMeSendEmail\Client;
  *
  * @see \LetMeSendEmail\Client
  *
- * @method Email emails();
- * @method Domain domains();
- * @method Contact contacts();
- * @method ContactCategory contactCategories();
- * @method ContactTag contactTags();
+ * @method Emails emails();
+ * @method Domains domains();
+ * @method Contacts contacts();
+ * @method ContactCategories contactCategories();
+ * @method ContactTags contactTags();
  * @method Client fake();
  */
 class LetMeSendEmail extends Facade

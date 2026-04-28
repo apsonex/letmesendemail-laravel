@@ -3,6 +3,7 @@
 namespace LetMeSendEmail\Laravel\Transport;
 
 use Exception;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use LetMeSendEmail\Client;
 use LetMeSendEmail\Contracts\ClientContract;
