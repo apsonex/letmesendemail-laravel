@@ -74,7 +74,7 @@ class LetMeSendEmailServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../config/letmesendemail.php' => $this->app->configPath('letmesendemail.php'),
-            ], 'letmesendemail-config');
+            ], 'config');
         }
     }
 
