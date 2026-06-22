@@ -18,7 +18,7 @@ it('can_get_transport', function () {
     expect((string) $transport)->toBe('letmesendemail');
 });
 
-it('can_send_email', function () {
+it('can_send_regular_email', function () {
     config([
         'letmesendemail.key' => 'test',
     ]);
@@ -29,10 +29,10 @@ it('can_send_email', function () {
 
     $email = (new Email())
         ->from($payload['from'])
-        ->to(new Address($payload['to']))
-        ->cc($payload['cc'][0])
-        ->bcc($payload['bcc'][0])
-        ->replyTo($payload['replyTo'][0])
+        ->to(fake()->email())
+        ->cc(fake()->email())
+        ->bcc(fake()->email())
+        ->replyTo(fake()->email())
         ->subject($payload['subject'])
         ->text($payload['text'])
         ->html($payload['html']);
@@ -58,10 +58,10 @@ it('can_send_email_with_attachments', function () {
 
     $email = (new Email())
         ->from($payload['from'])
-        ->to(new Address($payload['to']))
-        ->cc($payload['cc'][0])
-        ->bcc($payload['bcc'][0])
-        ->replyTo($payload['replyTo'][0])
+        ->to(fake()->email())
+        ->cc(fake()->email())
+        ->bcc(fake()->email())
+        ->replyTo(fake()->email())
         ->subject($payload['subject'])
         ->text($payload['text'])
         ->html($payload['html']);
