@@ -2,13 +2,13 @@
 
 namespace LetMeSendEmail\Laravel;
 
+use LetMeSendEmail\LetMeSendEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use LetMeSendEmail\Contracts\ClientContract;
 use LetMeSendEmail\Laravel\Exceptions\MissingApiKeyException;
 use LetMeSendEmail\Laravel\Transport\LetMeSendEmailTransportFactory;
-use LetMeSendEmail\LetMeSendEmail;
 
 class LetMeSendEmailServiceProvider extends ServiceProvider
 {
@@ -84,12 +84,5 @@ class LetMeSendEmailServiceProvider extends ServiceProvider
             __DIR__ . '/../config/letmesendemail.php',
             'letmesendemail'
         );
-    }
-
-    public function provides(): array
-    {
-        return [
-            \LetMeSendEmail\Client::class,
-        ];
     }
 }
