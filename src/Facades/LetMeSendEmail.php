@@ -20,7 +20,6 @@ use LetMeSendEmail\Client;
  * @method Domains domains();
  * @method Contacts contacts();
  * @method ContactCategories contactCategories();
- * @method ContactTags contactTags();
  * @method Client fake();
  */
 class LetMeSendEmail extends Facade

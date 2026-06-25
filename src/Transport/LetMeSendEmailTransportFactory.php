@@ -3,9 +3,6 @@
 namespace LetMeSendEmail\Laravel\Transport;
 
 use Exception;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
-use LetMeSendEmail\Client;
 use LetMeSendEmail\Contracts\ClientContract;
 use LetMeSendEmail\Laravel\Exceptions\MissingApiKeyException;
 use Symfony\Component\Mailer\Envelope;
@@ -77,7 +74,8 @@ class LetMeSendEmailTransportFactory extends AbstractTransport
                 'headers'     => $headers,
             ];
 
-            $response = $this->client->emails()
+            $response = $this->client
+                ->emails()
                 ->withHeaders(
                     array_filter(['Idempotency-Key' => $idempotencyKey], fn($value) => !is_null($value))
                 )

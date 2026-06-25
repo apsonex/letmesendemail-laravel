@@ -36,8 +36,6 @@ class WebhookController extends Controller
             return new Response('Invalid payload', 400);
         }
 
-        log_debug('$payload[\'type\']: ' . $payload['type']);
-
         $event = match ($payload['type']) {
             'email.bounced' => EmailBounced::class,
             'email.clicked' => EmailClicked::class,

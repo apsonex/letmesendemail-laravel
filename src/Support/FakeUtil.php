@@ -31,7 +31,7 @@ class FakeUtil
             );
         }
 
-        return File::json($path)['response'];
+        return File::json($path)['response']['data'];
     }
 
     public static function resolveFakeDataPath(?string $path = null): string

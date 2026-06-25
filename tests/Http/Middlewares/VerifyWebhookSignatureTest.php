@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use LetMeSendEmail\Laravel\Support\WebhookSigner;
-use LetMeSendEmail\Laravel\Http\Controllers\WebhookController;
+use App\Support\Webhook\WebhookSigner;
 
 use function Pest\Laravel\postJson;
 
@@ -22,21 +20,23 @@ function webhookPayload()
             'id' => 'email_123',
         ],
     ];
-    $msgId = 'msg_test_123';
+    $webhookId = 'w_123';
+    $webhookLogId = 'wl_123';
     $timestamp = time();
-    $signature = $signer->sign($msgId, $timestamp, json_encode($payload));
+    $signature = $signer->sign($webhookId, $webhookLogId, $timestamp, json_encode($payload));
 
-    return [$payload, $msgId, $timestamp, $signature];
+    return [$payload, $webhookId, $webhookLogId, $timestamp, $signature];
 }
 
 it('accepts_a_valid_signed_webhook', function () {
-    [$payload, $msgId, $timestamp, $signature] = webhookPayload();
+    [$payload, $webhookId, $webhookLogId, $timestamp, $signature] = webhookPayload();
 
     $response = postJson(
         config('letmesendemail.route.path') . '/webhook',
         $payload,
         [
-            'Webhook-Id' => $msgId,
+            'Webhook-Id' => $webhookId,
+            'Webhook-Log-Id' => $webhookLogId,
             'Webhook-Timestamp' => $timestamp,
             'Webhook-Signature' => $signature,
             'Content-Type' => 'application/json',
@@ -49,13 +49,14 @@ it('accepts_a_valid_signed_webhook', function () {
 });
 
 it('rejects_webhook_with_invalid_signature', function () {
-    [$payload, $msgId, $timestamp, $signature] = webhookPayload();
+    [$payload, $webhookId, $webhookLogId, $timestamp, $signature] = webhookPayload();
 
     $response = postJson(
         config('letmesendemail.route.path') . '/webhook',
         $payload,
         [
-            'Webhook-Id' => $msgId,
+            'Webhook-Id' => $webhookId,
+            'Webhook-Log-Id' => $webhookLogId,
             'Webhook-Timestamp' => $timestamp,
             'Webhook-Signature' => 'v1,invalid-signature',
             'Content-Type' => 'application/json',
