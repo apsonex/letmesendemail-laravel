@@ -59,6 +59,8 @@ class LetMeSendEmailServiceProvider extends ServiceProvider
 
     protected function registerRoutes(): void
     {
+        if (!config('letmesendemail.webhook.enable')) return;
+
         Route::group([
             'domain'    => config('letmesendemail.domain', null),
             'namespace' => 'LetMeSendEmail\Laravel\Http\Controllers',
@@ -71,11 +73,11 @@ class LetMeSendEmailServiceProvider extends ServiceProvider
 
     protected function registerPublishing(): void
     {
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__ . '/../config/letmesendemail.php' => $this->app->configPath('letmesendemail.php'),
-            ], 'config');
-        }
+        if (!$this->app->runningInConsole()) return;
+
+        $this->publishes([
+            __DIR__ . '/../config/letmesendemail.php' => $this->app->configPath('letmesendemail.php'),
+        ], 'config');
     }
 
     protected function configure(): void
