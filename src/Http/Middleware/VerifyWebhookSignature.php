@@ -32,7 +32,7 @@ class VerifyWebhookSignature
                 secret: $secret,
                 tolerance: (int) config('letmesendemail.webhook.tolerance', 300),
             );
-        } catch (WebhookVerificationException | WebhookSigningException $e) {
+        } catch (WebhookVerificationException|WebhookSigningException $e) {
             return $this->makeResponse(message: $e->getMessage());
         } catch (Throwable $e) {
             return $this->makeResponse(
